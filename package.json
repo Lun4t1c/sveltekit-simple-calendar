@@ -2,8 +2,10 @@
   "name": "sveltekit-simple-calendar",
   "version": "0.0.1",
   "description": "Simple sveltekit calendar which shouldn't give headaches when trying to use it",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,6 +17,18 @@
     "sveltekit",
     "calendar"
   ],
+  "files": [
+    "dist",
+    "src"
+  ],
   "author": "Lunat1c",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "postcss": "^8.4.23",
+    "rollup": "^3.21.5",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-svelte": "^7.1.4",
+    "svelte": "^3.59.0"
+  }
 }
