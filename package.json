@@ -1,0 +1,20 @@
+{
+  "name": "sveltekit-simple-calendar",
+  "version": "0.0.1",
+  "description": "Simple sveltekit calendar which shouldn't give headaches when trying to use it",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "sveltekit-simple-calendar"
+  },
+  "keywords": [
+    "svelte",
+    "sveltekit",
+    "calendar"
+  ],
+  "author": "Lunat1c",
+  "license": "MIT"
+}
