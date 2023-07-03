@@ -1,17 +1,58 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
+    import { onMount } from 'svelte';
+  
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
-    let daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    let firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    let days = [...Array(daysInMonth).keys()];
-    let prevMonthDays = [...Array(firstDay).keys()];
-
-    onMount(() => {});
-</script>
-
+    let weeks = [];
+  
+    const generateCalendar = () => {
+      weeks = [];
+      const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+      const startingDay = firstDayOfMonth.getDay() || 7; // Adjust for Monday as the first day
+      const numDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const numRows = Math.ceil((startingDay + numDays) / 7);
+  
+      let day = 1;
+  
+      for (let row = 0; row < numRows; row++) {
+        let week = [];
+  
+        for (let col = 1; col <= 7; col++) {
+          if ((row === 0 && col < startingDay) || day > numDays) {
+            week.push(null);
+          } else {
+            week.push(day);
+            day++;
+          }
+        }
+  
+        weeks.push(week);
+      }
+    };
+  
+    onMount(generateCalendar);
+  
+    const previousMonth = () => {
+      if (currentMonth === 0) {
+        currentMonth = 11;
+        currentYear--;
+      } else {
+        currentMonth--;
+      }
+      generateCalendar();
+    };
+  
+    const nextMonth = () => {
+      if (currentMonth === 11) {
+        currentMonth = 0;
+        currentYear++;
+      } else {
+        currentMonth++;
+      }
+      generateCalendar();
+    };
+  </script>
 
 <body>
     <!-- TOP CONTROLS -->
@@ -27,47 +68,65 @@
 
     <!-- MAIN TABLE -->
     <div class="calendar">
-        <div class="day">Sun</div>
-        <div class="day">Mon</div>
-        <div class="day">Tue</div>
-        <div class="day">Wed</div>
-        <div class="day">Thu</div>
-        <div class="day">Fri</div>
-        <div class="day">Sat</div>
-
-        {#each prevMonthDays as day (day)}
-            <div class="day other-month">{day + 1}</div>
-        {/each}
-
-        {#each days as day (day)}
-            <div class="day">{day + 1}</div>
-        {/each}
-    </div>
+        <div class="header">
+          <span class="previous" on:click={previousMonth}>&lt;</span>
+          <span>{currentMonth + 1}/{currentYear}</span>
+          <span class="next" on:click={nextMonth}>&gt;</span>
+        </div>
+        
+        <div class="grid">
+          <div class="day">Mon</div>
+          <div class="day">Tue</div>
+          <div class="day">Wed</div>
+          <div class="day">Thu</div>
+          <div class="day">Fri</div>
+          <div class="day">Sat</div>
+          <div class="day">Sun</div>
+      
+          {#each weeks as week}
+            {#each week as day}
+              {#if day === null}
+                <div class="day"></div>
+              {:else}
+                <div class="day">{day}</div>
+              {/if}
+            {/each}
+          {/each}
+        </div>
+      </div>
 </body>
-
 
 <style>
     .calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 1px;
-        background-color: black;
-        padding: 5px;
-        border: 1px solid #ccc;
-    }
+    font-family: Arial, sans-serif;
+    margin: 20px auto;
+    max-width: 300px;
+  }
 
-    .day {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgb(44, 44, 53);
-        font-weight: bold;
-        height: 40px;
-    }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-    .day.other-month {
-        color: #999;
-    }
+  .previous,
+  .next {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #ddd;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .day {
+    padding: 5px;
+    text-align: center;
+  }
 
     .btn-nav {
         background-color: darkblue;
